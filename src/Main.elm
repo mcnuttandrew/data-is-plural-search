@@ -172,10 +172,10 @@ produceData inputStr sort =
 
 withLog : a -> String -> a
 withLog x msg =
-    let
-        dummy =
-            Debug.log "LOG" msg
-    in
+    -- let
+    -- dummy =
+    --     Debug.log "LOG" msg
+    -- in
     x
 
 
@@ -223,10 +223,10 @@ updateR msg model =
                     receiveText fullText model
 
                 Err e ->
-                    let
-                        dummy =
-                            Debug.log "errror" e
-                    in
+                    -- let
+                    --     dummy =
+                    --         Debug.log "errror" e
+                    -- in
                     model
 
         SpecifySearch search ->
