@@ -265,24 +265,26 @@ view : Model -> Html Msg
 view { selectedRows, search, sort } =
     div [ id "app" ]
         [ div [ class "header" ]
-            [ h1 []
-                [ text "Data Is Plural Search" ]
-            , p []
-                [ span []
-                    [ text "Data is plural is a weekly newsletter of useful/curious datasets published by " ]
-                , a
-                    [ href "https://twitter.com/jsvine" ]
-                    [ text "Jeremy Singer-Vine" ]
-                , span []
-                    [ text ". You can find out more about his project at " ]
-                , a
-                    [ href "https://tinyletter.com/data-is-plural" ]
-                    [ text "the project page" ]
-                , span []
-                    [ text ". This is an unofficial page that presents the full archive of the news letter in an easy to search and browse manner. It is not affiliated with Singer-Vine. Please enjoy! " ]
-                , a
-                    [ href "https://github.com/mcnuttandrew/data-is-plural-search" ]
-                    [ text "PR/Issues/Comments welcome" ]
+            [ div [ class "header-contents" ]
+                [ h1 []
+                    [ text "Data Is Plural Search" ]
+                , p []
+                    [ span []
+                        [ text "Data is plural is a weekly newsletter of useful/curious datasets published by " ]
+                    , a
+                        [ href "https://twitter.com/jsvine" ]
+                        [ text "Jeremy Singer-Vine" ]
+                    , span []
+                        [ text ". You can find out more about his project at " ]
+                    , a
+                        [ href "https://tinyletter.com/data-is-plural" ]
+                        [ text "the project page" ]
+                    , span []
+                        [ text ". This is an unofficial page that presents the full archive of the news letter in an easy to search and browse manner. It is not affiliated with Singer-Vine. Please enjoy! " ]
+                    , a
+                        [ href "https://github.com/mcnuttandrew/data-is-plural-search" ]
+                        [ text "PR/Issues/Comments welcome" ]
+                    ]
                 ]
             , div [ class "flex" ]
                 [ input [ placeholder "Search here", onInput SpecifySearch, value search ] []
@@ -293,6 +295,11 @@ view { selectedRows, search, sort } =
                 ]
             ]
         , div [ class "entries" ] (List.map renderRow selectedRows)
+        , if List.length selectedRows == 0 then
+            div [ class "loader" ] []
+
+          else
+            div [] []
         ]
 
 
