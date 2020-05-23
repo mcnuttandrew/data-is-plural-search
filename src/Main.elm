@@ -275,7 +275,7 @@ view { selectedRows, search, sort } =
                 , span []
                     [ text ". This is an unofficial page that presents the full archive of the news letter in an easy to search and browse manner. It is not affiliated with Singer-Vine. Please enjoy! " ]
                 , a
-                    [ href "https://tinyletter.com/data-is-plural" ]
+                    [ href "https://github.com/mcnuttandrew/data-is-plural-search" ]
                     [ text "PR/Issues/Comments welcome" ]
                 ]
             , div [ class "flex" ]
