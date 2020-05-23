@@ -50,7 +50,7 @@ init : () -> ( Model, Cmd Msg )
 init _ =
     ( { data = Nothing, search = "", selectedRows = [], sort = ByDate }
     , Http.get
-        { url = "./snapshot.tsv"
+        { url = "./latest.tsv"
         , expect = Http.expectString GotText
         }
     )
@@ -83,24 +83,6 @@ getDate str =
 
         Err _ ->
             fromOrdinalDate 1970 1
-
-
-parseRow : List String -> List DataRow -> List DataRow
-parseRow row acc =
-    case row of
-        [ edition, position, headline, text, links, hattips ] ->
-            { edition = edition
-            , editionDate = getDate edition
-            , position = getPosition position
-            , headline = headline
-            , text = text
-            , links = String.split " " links
-            , hattips = String.split " " hattips
-            }
-                :: acc
-
-        _ ->
-            acc
 
 
 type SortType
@@ -151,6 +133,35 @@ sortList data sort =
                     compareByPosition a b
     in
     List.sortWith comparator data
+
+
+parseRow : List String -> List DataRow -> List DataRow
+parseRow row acc =
+    case row of
+        [ edition, position, headline, text, links, hattips ] ->
+            { edition = edition
+            , editionDate = getDate edition
+            , position = getPosition position
+            , headline = headline
+            , text = text
+            , links = String.split " " links
+            , hattips = String.split " " hattips
+            }
+                :: acc
+
+        [ edition, position, headline, text, links ] ->
+            { edition = edition
+            , editionDate = getDate edition
+            , position = getPosition position
+            , headline = headline
+            , text = text
+            , links = String.split " " links
+            , hattips = []
+            }
+                :: acc
+
+        _ ->
+            acc
 
 
 produceData : String -> SortType -> Maybe (List DataRow)
