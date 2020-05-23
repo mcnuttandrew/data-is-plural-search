@@ -35,11 +35,6 @@ type alias Model =
     }
 
 
-
--- type alias DataRow =
---     List String
-
-
 type alias DataRow =
     { edition : String
     , editionDate : Date
