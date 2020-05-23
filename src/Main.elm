@@ -94,8 +94,8 @@ parseRow row acc =
             , position = getPosition position
             , headline = headline
             , text = text
-            , links = String.split "\n" links
-            , hattips = String.split "\n" hattips
+            , links = String.split " " links
+            , hattips = String.split " " hattips
             }
                 :: acc
 
@@ -142,7 +142,7 @@ sortList data sort =
         comparator a b =
             case sort of
                 ByDate ->
-                    compareByDate a b
+                    negateOrder (compareByDate a b)
 
                 ByName ->
                     compare a.headline b.headline
@@ -300,6 +300,25 @@ renderSortButton name sort currentSort =
         [ text name ]
 
 
+getLink : List String -> String
+getLink x =
+    case List.head x of
+        Just y ->
+            y
+
+        Nothing ->
+            ""
+
+
+singleOrMultiple : List String -> String -> List (Html Msg)
+singleOrMultiple strs name =
+    if List.length strs == 1 then
+        [ a [ href (getLink strs) ] [ text name ] ]
+
+    else
+        List.indexedMap (\idx link -> a [ href link ] [ text (name ++ " " ++ String.fromInt (idx + 1) ++ ", ") ]) strs
+
+
 renderRow : DataRow -> Html Msg
 renderRow row =
     div [ class "entry flex" ]
@@ -308,15 +327,7 @@ renderRow row =
             , div [ class "flex edition" ]
                 [ h5 [] [ text ("Edition " ++ row.edition ++ " Position " ++ String.fromInt row.position) ]
                 ]
-            , div [ class "flex links" ]
-                [ h5 []
-                    (List.map (\link -> a [ href link ] [ text "link" ]) row.links)
-                , h5 []
-                    (List.map
-                        (\ack -> a [ href ack ] [ text "source" ])
-                        row.hattips
-                    )
-                ]
+            , h5 [ class "links" ] (List.append (singleOrMultiple row.links "link") (singleOrMultiple row.hattips "source"))
             ]
         , p [] [ text row.text ]
         ]

@@ -95,6 +95,10 @@ img {
   margin-left: 10px;
 }
 
+.links {
+  text-align: right;
+}
+
 .entry .links,
 .entry .edition {
   justify-content: flex-end;
