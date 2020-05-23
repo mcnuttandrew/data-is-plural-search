@@ -7,10 +7,13 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "elm-app build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {}
+  "devDependencies": {
+    "create-elm-app": "^4.2.23"
+  }
 }
