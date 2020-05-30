@@ -270,7 +270,13 @@ view { selectedRows, search, sort } =
                     [ text "Data Is Plural Search" ]
                 , p []
                     [ span []
-                        [ text "Data is plural is a weekly newsletter of useful/curious datasets published by " ]
+                        [ text "Data is plural is a " ]
+                    , a
+                        [ href "https://tinyletter.com/data-is-plural" ]
+                        [ text " weekly newsletter" ]
+                    , span
+                        []
+                        [ text " of useful/curious datasets published by " ]
                     , a
                         [ href "https://twitter.com/jsvine" ]
                         [ text "Jeremy Singer-Vine" ]
@@ -280,7 +286,12 @@ view { selectedRows, search, sort } =
                         [ href "https://tinyletter.com/data-is-plural" ]
                         [ text "the project page" ]
                     , span []
-                        [ text ". This is an unofficial page that presents the full archive of the news letter in an easy to search and browse manner. It is not affiliated with Singer-Vine. Please enjoy! " ]
+                        [ text ". This is an unofficial page that presents the " ]
+                    , a
+                        [ href "https://docs.google.com/spreadsheets/d/1wZhPLMCHKJvwOkP4juclhjFgqIY8fQFMemwKL2c64vk/edit#gid=0" ]
+                        [ text "full archive" ]
+                    , span []
+                        [ text " of the news letter in an easy to search and browse manner. It is not affiliated with Singer-Vine. Please enjoy! " ]
                     , a
                         [ href "https://github.com/mcnuttandrew/data-is-plural-search" ]
                         [ text "PR/Issues/Comments welcome" ]
