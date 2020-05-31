@@ -256,10 +256,10 @@ updateR msg model =
                     model
 
         SpecifySearch search ->
-            { model | search = search, selectedRows = applySearchAndSort search model.data model.sort }
+            { model | search = search, selectedRows = applySearchAndSort search model.data model.sort, pages = 1 }
 
         SetPosition sort ->
-            { model | sort = sort, selectedRows = applySearchAndSort model.search model.data sort }
+            { model | sort = sort, selectedRows = applySearchAndSort model.search model.data sort, pages = 1 }
 
         ScrollEvent { scrollHeight, scrollTop, offsetHeight } ->
             if (scrollHeight - scrollTop) <= offsetHeight then
@@ -267,10 +267,6 @@ updateR msg model =
 
             else
                 model
-
-
-
--- withLog model (boolToString ((scrollHeight - scrollTop) <= offsetHeight))
 
 
 type Msg
