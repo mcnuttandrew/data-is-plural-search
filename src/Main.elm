@@ -187,10 +187,10 @@ produceData inputStr sort =
 
 withLog : a -> String -> a
 withLog x msg =
-    let
-        dummy =
-            Debug.log "LOG" msg
-    in
+    -- let
+    --     dummy =
+    --         Debug.log "LOG" msg
+    -- in
     x
 
 
@@ -261,6 +261,7 @@ updateR msg model =
         SetPosition sort ->
             { model | sort = sort, selectedRows = applySearchAndSort model.search model.data sort, pages = 1 }
 
+        -- https://stackoverflow.com/questions/40690998/how-to-implement-infinite-scroll-in-elm
         ScrollEvent { scrollHeight, scrollTop, offsetHeight } ->
             if (scrollHeight - scrollTop) <= offsetHeight then
                 { model | pages = model.pages + 1 }
