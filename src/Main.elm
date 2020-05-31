@@ -8,6 +8,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http
+import Json.Decode
 
 
 
@@ -32,6 +33,7 @@ type alias Model =
     , selectedRows : List DataRow
     , search : String
     , sort : SortType
+    , pages : Int
     }
 
 
@@ -48,7 +50,7 @@ type alias DataRow =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { data = Nothing, search = "", selectedRows = [], sort = ByDate }
+    ( { data = Nothing, search = "", selectedRows = [], sort = ByDate, pages = 1 }
     , Http.get
         { url = "./latest.tsv"
         , expect = Http.expectString GotText
@@ -89,6 +91,13 @@ type SortType
     = ByDate
     | ByName
     | ByPosition
+
+
+type alias ScrollInfo =
+    { scrollHeight : Float
+    , scrollTop : Float
+    , offsetHeight : Float
+    }
 
 
 
@@ -178,10 +187,10 @@ produceData inputStr sort =
 
 withLog : a -> String -> a
 withLog x msg =
-    -- let
-    -- dummy =
-    --     Debug.log "LOG" msg
-    -- in
+    let
+        dummy =
+            Debug.log "LOG" msg
+    in
     x
 
 
@@ -220,6 +229,17 @@ receiveText fullText model =
     { model | data = data, selectedRows = output }
 
 
+onScroll msg =
+    on "scroll" (Json.Decode.map msg scrollInfoDecoder)
+
+
+scrollInfoDecoder =
+    Json.Decode.map3 ScrollInfo
+        (Json.Decode.at [ "target", "scrollHeight" ] Json.Decode.float)
+        (Json.Decode.at [ "target", "scrollTop" ] Json.Decode.float)
+        (Json.Decode.at [ "target", "offsetHeight" ] Json.Decode.float)
+
+
 updateR : Msg -> Model -> Model
 updateR msg model =
     case msg of
@@ -241,11 +261,23 @@ updateR msg model =
         SetPosition sort ->
             { model | sort = sort, selectedRows = applySearchAndSort model.search model.data sort }
 
+        ScrollEvent { scrollHeight, scrollTop, offsetHeight } ->
+            if (scrollHeight - scrollTop) <= offsetHeight then
+                { model | pages = model.pages + 1 }
+
+            else
+                model
+
+
+
+-- withLog model (boolToString ((scrollHeight - scrollTop) <= offsetHeight))
+
 
 type Msg
     = GotText (Result Http.Error String)
     | SpecifySearch String
     | SetPosition SortType
+    | ScrollEvent ScrollInfo
 
 
 
@@ -262,8 +294,8 @@ subscriptions model =
 
 
 view : Model -> Html Msg
-view { selectedRows, search, sort } =
-    div [ id "app" ]
+view { selectedRows, search, sort, pages } =
+    div [ id "app", onScroll ScrollEvent ]
         [ div [ class "header" ]
             [ div [ class "header-contents" ]
                 [ h1 []
@@ -305,7 +337,7 @@ view { selectedRows, search, sort } =
                 , renderSortButton "By Position" ByPosition sort
                 ]
             ]
-        , div [ class "entries" ] (List.map renderRow selectedRows)
+        , div [ class "entries" ] (List.map renderRow (List.take (20 * pages) selectedRows))
         , if List.length selectedRows == 0 then
             div [ class "loader" ] []
 

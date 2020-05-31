@@ -46,6 +46,11 @@ img {
   max-width: 200px;
 }
 
+#app {
+  max-height: 1500px;
+  overflow: scroll;
+}
+
 .header {
   align-items: center;
   padding: 30px 80px;
